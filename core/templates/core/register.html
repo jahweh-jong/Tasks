@@ -1,0 +1,45 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Register{% endblock title %}
+
+{% block content %}
+    <div class="container">
+        <div class="m-5 p-3">
+            <h4 class="p-2 mx-auto" style="width: 200px;">Register now!</h4>
+            <form method="post" action=".">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    {{form.username}}
+                    <div id="usernameHelp" class="form-text">Please choose a unique username</div>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email address</label>
+                    {{form.email}}
+                    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="password1" class="form-label">Password</label>
+                    {{form.password1}}
+                </div>
+                <div class="mb-3">
+                    <label for="password2" class="form-label">Confirm password</label>
+                    {{form.password2}}
+                </div>
+
+                {% if form.errors or form.non_field_errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {% for field in form %}
+                            {{ field.errors }}
+                        {% endfor %}
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+
+                <button type="submit" class="btn btn-primary">Register</button>
+            </form>
+        </div>
+    </div>
+{% endblock content %}
+

@@ -1,0 +1,59 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Main tasks{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <form class="mt-3" method="post" action=".">
+        {% csrf_token %}
+        <div class="input-group mb-3">
+            {{form.title}}
+            <button class="btn btn-outline-primary" type="submit" id="button-create">Add</button>
+          </div>
+        {% if form.errors or form.non_field_errors %}
+            <div cclass="alert alert-danger" role="alert">
+                {% for field in form %}
+                    {{ field.errors }}
+                {% endfor %}
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+    </form>
+    <ul class="nav nav-tabs mt-3" id="tasksTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="active-tasks-tab" data-bs-toggle="tab" data-bs-target="#active-tasks-tab-pane" type="button" role="tab" aria-controls="active-tasks-tab-pane" aria-selected="true">Active tasks</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="done-tasks-tab" data-bs-toggle="tab" data-bs-target="#done-tasks-tab-pane" type="button" role="tab" aria-controls="done-tasks-tab-pane" aria-selected="false">Done tasks</button>
+        </li>
+      </ul>
+      <div class="tab-content" id="tasksTabsContent">
+        <div class="tab-pane fade show active p-3" id="active-tasks-tab-pane" role="tabpanel" aria-labelledby="active-tasks-tab" tabindex="0">
+            <ul class="list-group">
+                {% for task in undone_tasks %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ task.title }}
+                        <div>
+                            <a href="{% url 'tasks:done' task.id%}" class="btn btn-success btn-sm">Done</a>
+                            <a href="{% url 'tasks:delete' task.id %}" class="btn btn-danger btn-sm">Delete</a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="tab-pane fade p-3" id="done-tasks-tab-pane" role="tabpanel" aria-labelledby="done-tasks-tab" tabindex="0">
+            <ul class="list-group">
+                {% for task in done_tasks %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ task.title }}
+                        <div>
+                            <a href="{% url 'tasks:undone' task.id%}" class="btn btn-success btn-sm">Undone</a>
+                            <a href="{% url 'tasks:delete' task.id %}" class="btn btn-danger btn-sm">Delete</a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>            
+        </div>
+      </div>
+</div>
+{% endblock content %}
